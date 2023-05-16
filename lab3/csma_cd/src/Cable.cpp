@@ -100,3 +100,14 @@ void Cable::propagateSignal() {
 
     medium = newMedium;
 }
+
+void Cable::endTransmitting(std::string stationName) {
+    for(auto it = stations.begin(); it != stations.end(); ++it) {
+        if(it->second->getName() == stationName) {
+            for(Signal& signal: medium[it->first]) {
+                if(signal.getColor() == it->second->getSignalColor())
+                    signal.clearTimeToLive();
+            }
+        }
+    }
+}

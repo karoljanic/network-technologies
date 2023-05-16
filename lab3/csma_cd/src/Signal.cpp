@@ -30,3 +30,7 @@ unsigned short Signal::getTimeToLive() const {
 void Signal::decreaseTimeToLive() { 
     timeToLive--;
 }
+
+void Signal::clearTimeToLive() {
+    timeToLive = 0;
+}

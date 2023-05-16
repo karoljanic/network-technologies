@@ -23,6 +23,7 @@ public:
     bool isLastSignal() const;
     unsigned short getTimeToLive() const;
     void decreaseTimeToLive();
+    void clearTimeToLive();
 };  
 
 #endif // SIGNAL_HPP

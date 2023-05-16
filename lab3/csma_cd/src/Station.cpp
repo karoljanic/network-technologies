@@ -114,4 +114,5 @@ void Station::solveCollision() {
 
 void Station::stopTransmitting() {
     state = State::RECEIVING;
+    cable->endTransmitting(name);
 }

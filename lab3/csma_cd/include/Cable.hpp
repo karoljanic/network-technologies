@@ -28,6 +28,7 @@ public:
     void visualise();
     void initializeSignal(unsigned int position, std::string color);
     void propagateSignal();
+    void endTransmitting(std::string stationName);
 };
 
 #endif // CABLE_HPP
