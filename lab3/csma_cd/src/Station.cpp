@@ -92,22 +92,28 @@ void Station::startTransmitting() {
 void Station::solveCollision() {
     logger += "detected collision!\n";
     stopTransmitting();
+    cable->initializeJam(position, "255");
     sendingFails++;
 
-    if(sendingFails < 15) {
+    if(sendingFails > 16) {
+        state = State::RECEIVING;
+        logger += "transmission aborted!\n";
+    }
+    else {
+        unsigned short fails;
         if(sendingFails > 10)
-            sendingFails = 10;
+            fails = 10;
+        else
+            fails = sendingFails;
 
         state = State::COLLISION_WAIT;
-        unsigned int maxWaitSlots = (2 << sendingFails - 1) - 1;
+        
+        unsigned int maxWaitSlots = (2 << fails - 1) - 1;
         std::uniform_int_distribution<> dis(0, maxWaitSlots);
         int waitSlots = dis(generator);
         waitingTime = 2 * cable->getLength() * waitSlots;
+
         logger += ("waiting " + std::to_string(waitingTime) + "\n");
-    }
-    else {
-        state = State::RECEIVING;
-        logger += "transmission aborted!\n";
     }
 }
 

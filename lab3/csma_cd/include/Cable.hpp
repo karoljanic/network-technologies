@@ -27,6 +27,7 @@ public:
     void connectStation(Station* station);
     void visualise();
     void initializeSignal(unsigned int position, std::string color);
+    void initializeJam(unsigned int position, std::string color);
     void propagateSignal();
     void endTransmitting(std::string stationName);
 };

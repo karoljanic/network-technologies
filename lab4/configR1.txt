@@ -1,0 +1,37 @@
+conf t
+int f0/0
+ip address dhcp
+ip nat outside
+no shut
+end
+
+conf t
+ip domain-lookup
+ip name-server 8.8.8.8
+end
+
+conf t
+int f0/1
+ip add 192.168.3.1 255.255.255.0
+ip nat inside
+no shut
+end
+
+conf t
+router rip
+version 2
+no auto-summary
+network 192.168.0.0
+network 192.168.3.0
+default-information originate
+end
+
+conf t
+access-list 10 permit 192.168.1.0 0.0.254.255
+access-list 10 permit 192.168.2.0 0.0.253.255
+access-list 10 permit 192.168.3.0 0.0.252.255
+access-list 10 permit 192.168.4.0 0.0.251.255
+ip nat inside source list 10 interface f0/0 overload
+end
+
+write

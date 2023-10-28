@@ -40,7 +40,10 @@ void Cable::visualise() {
         int counter = 0;
         for(const Signal& signal: medium[i]) {
             counter++;
-            std::cout << "\033[38;5;" << signal.getColor() << "m#\033[0m";
+            if(signal.getType() == Type::DATA)
+                std::cout << "\033[38;5;" << signal.getColor() << "m#\033[0m";
+            else if(signal.getType() == Type::JAM)
+                std::cout << "\033[38;5;" << signal.getColor() << "m!\033[0m";
         }
         for(;counter < stations.size(); counter++)
             std::cout << " ";
@@ -66,7 +69,11 @@ void Cable::visualise() {
 
 
 void Cable::initializeSignal(unsigned int position, std::string color) {
-    medium[position].emplace_back(Signal(color, Direction::BOTH, true, 2 * length));
+    medium[position].emplace_back(color, Direction::BOTH, Type::DATA, true, 2 * length);
+}
+
+void Cable::initializeJam(unsigned int position, std::string color) {
+    medium[position].emplace_back(color, Direction::BOTH, Type::JAM, true, 2 * length);
 }
 
 
@@ -76,25 +83,25 @@ void Cable::propagateSignal() {
     for(unsigned int i = 0; i < length; i++) {
         for(auto jt = medium[i].begin(); jt != medium[i].end(); ++jt) {
             if(jt->getDirection() == Direction::LEFT && i > 0) {
-                newMedium[i - 1].emplace_back(jt->getColor(), Direction::LEFT, false, 0);                   
+                newMedium[i - 1].emplace_back(jt->getColor(), Direction::LEFT, jt->getType(), false, 0);                   
             }
             
             if(jt->getDirection() == Direction::RIGHT && i < length - 1) {
-                newMedium[i + 1].emplace_back(jt->getColor(), Direction::RIGHT, false, 0);
+                newMedium[i + 1].emplace_back(jt->getColor(), Direction::RIGHT, jt->getType(), false, 0);
             }
 
             if(jt->getDirection() == Direction::BOTH) {
                 if(i > 0) {
-                    newMedium[i - 1].emplace_back(jt->getColor(), Direction::LEFT, false, 0);
+                    newMedium[i - 1].emplace_back(jt->getColor(), Direction::LEFT, jt->getType(), false, 0);
                 }
                 
                 if(i < length - 1) {
-                    newMedium[i + 1].emplace_back(jt->getColor(), Direction::RIGHT, false, 0);
+                    newMedium[i + 1].emplace_back(jt->getColor(), Direction::RIGHT, jt->getType(), false, 0);
                 }
             }
 
             if(jt->isLastSignal() && jt->getTimeToLive() > 1)
-                newMedium[i].emplace_back(jt->getColor(), jt->getDirection(), true, jt->getTimeToLive() - 1); 
+                newMedium[i].emplace_back(jt->getColor(), jt->getDirection(), jt->getType(), true, jt->getTimeToLive() - 1); 
         }
     }
 

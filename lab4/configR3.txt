@@ -1,0 +1,23 @@
+conf t
+int fa0/0
+ip add 192.168.4.2 255.255.255.0
+no shut
+int fa0/1
+ip add 192.168.2.1 255.255.255.0
+no shut
+end
+
+conf t
+router rip
+version 2
+no auto-summary
+network 192.168.4.0
+network 192.168.2.0
+end
+
+conf t
+ip domain-lookup
+ip name-server 8.8.8.8
+end
+
+write

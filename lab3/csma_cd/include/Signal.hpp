@@ -9,17 +9,24 @@ enum class Direction {
     BOTH
 };
 
+enum class Type {
+    DATA,
+    JAM
+};
+
 class Signal {
     Direction direction;
     std::string color;
+    Type signalType;
     unsigned short timeToLive;
     bool isLast;
 
 public:
-    Signal(std::string signalColor, Direction direction, bool back, unsigned short liveTime);
+    Signal(std::string signalColor, Direction direction, Type type, bool back, unsigned short liveTime);
 
     Direction getDirection() const;
     std::string getColor() const;
+    Type getType() const;
     bool isLastSignal() const;
     unsigned short getTimeToLive() const;
     void decreaseTimeToLive();

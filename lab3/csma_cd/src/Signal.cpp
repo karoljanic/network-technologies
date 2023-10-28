@@ -1,8 +1,9 @@
 #include "Signal.hpp"
 
-Signal::Signal(std::string signalColor, Direction direction, bool last, unsigned short liveTime): 
+Signal::Signal(std::string signalColor, Direction direction, Type type, bool last, unsigned short liveTime): 
     direction(direction), 
     color(signalColor),
+    signalType(type),
     timeToLive(liveTime),
     isLast{last} { }
 
@@ -14,6 +15,10 @@ Direction Signal::getDirection() const {
 
 std::string Signal::getColor() const { 
     return color; 
+}
+
+Type Signal::getType() const {
+    return signalType;
 }
 
 
